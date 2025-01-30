@@ -1,0 +1,43 @@
+---
+config:
+  class:
+    hideEmptyMembersBox: true
+  theme: 'base'
+  themeVariables:
+    lineColor: '#666666'
+    mainBkg: '#ffffff99'
+    classText: '#666666'
+---
+classDiagram
+    namespace chat_clients {
+        class ChatClient:::interface
+        class DefaultChatClient:::concrete
+    }
+
+    namespace function_callbacks {
+        class FunctionCallback:::interface
+        class McpFunctionCallback:::concrete
+        class MethodInvokingFunctionCallback:::concrete
+    }
+
+    namespace mcp_client {
+        class McpSyncClient:::concrete
+        class McpTransport:::interface
+        class StdioClientTransport:::concrete
+        class SseClientTransport:::concrete
+    }
+
+    ChatClient <|-- DefaultChatClient : implements
+    FunctionCallback <|-- McpFunctionCallback : implements
+    FunctionCallback <-- MethodInvokingFunctionCallback : implements
+
+    DefaultChatClient ..> FunctionCallback : use
+
+    McpTransport <|-- StdioClientTransport : implements
+    McpTransport <|-- SseClientTransport : implements
+
+    McpFunctionCallback ..> McpSyncClient : use
+    McpSyncClient ..> McpTransport : use
+
+    classDef interface fill:#6ed7d1,stroke:#01b4aa,color:#01837c
+    classDef concrete fill:#f58b8d,stroke:#f0565a,color:#c0363b

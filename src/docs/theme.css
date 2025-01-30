@@ -1,0 +1,28 @@
+/* @theme mytheme */
+
+@import 'gaia';
+
+section {
+    font-family: 'Helvetica Neue', 'ヒラギノ角ゴシック';
+    background-color: white;
+}
+
+span.t1 { color: red; }
+span.t2 { color: orange; }
+span.t3 { color: yellowgreen; }
+span.t4 { color: green; }
+span.t5 { color: blue; }
+span.t6 { color: navy; }
+span.t7 { color: purple; }
+
+small {
+    font-size: 0.75rem;
+}
+
+h1, h2, h3 {
+    color: #008a81;
+}
+
+a {
+    color: #d64549;
+}

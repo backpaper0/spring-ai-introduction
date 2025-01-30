@@ -1,0 +1,64 @@
+---
+config:
+  class:
+    hideEmptyMembersBox: true
+  theme: 'base'
+  themeVariables:
+    lineColor: '#666666'
+    mainBkg: '#ffffff99'
+    classText: '#666666'
+---
+classDiagram
+    namespace chat_clients {
+        class ChatClient:::interface
+        class DefaultChatClient:::concrete
+    }
+
+    namespace advisors {
+        class Advisor:::interface
+        class CallAroundAdvisor:::interface
+        class StreamAroundAdvisor:::interface
+        class MessageChatMemoryAdvisor:::concrete
+        class QuestionAnswerAdvisor:::concrete
+        class RetrievalAugmentationAdvisor:::concrete
+    }
+
+    namespace vector_stores {
+        class VectorStore:::interface
+        class PgVectorStore:::concrete
+        class SimpleVectorStore:::concrete
+        class CosmosDBVectorStore:::concrete
+    }
+
+    namespace embedding_models {
+        class EmbeddingModel:::interface
+        class OpenAiEmbeddingModel:::concrete
+        class PostgresMlEmbeddingModel:::concrete
+        class OllamaEmbeddingModel:::concrete
+    }
+
+    ChatClient <|-- DefaultChatClient : implements
+    Advisor <|-- CallAroundAdvisor : extends
+    Advisor <|-- StreamAroundAdvisor : extends
+    CallAroundAdvisor <|-- MessageChatMemoryAdvisor : implements
+    StreamAroundAdvisor <|-- MessageChatMemoryAdvisor : implements
+    CallAroundAdvisor <|-- QuestionAnswerAdvisor : implements
+    StreamAroundAdvisor <|-- QuestionAnswerAdvisor : implements
+    CallAroundAdvisor <|-- RetrievalAugmentationAdvisor : implements
+    StreamAroundAdvisor <|-- RetrievalAugmentationAdvisor : implements
+    VectorStore <|-- PgVectorStore : implements
+    VectorStore <|-- SimpleVectorStore : implements
+    VectorStore <|-- CosmosDBVectorStore : implements
+    EmbeddingModel <|-- OpenAiEmbeddingModel : implements
+    EmbeddingModel <|-- PostgresMlEmbeddingModel : implements
+    EmbeddingModel <|-- OllamaEmbeddingModel : implements
+
+    DefaultChatClient ..> Advisor : use
+    QuestionAnswerAdvisor ..> VectorStore : use
+    RetrievalAugmentationAdvisor ..> VectorStore : use
+    PgVectorStore ..> EmbeddingModel : use
+    SimpleVectorStore ..> EmbeddingModel : use
+    CosmosDBVectorStore ..> EmbeddingModel : use
+
+    classDef interface fill:#6ed7d1,stroke:#01b4aa,color:#01837c
+    classDef concrete fill:#f58b8d,stroke:#f0565a,color:#c0363b
