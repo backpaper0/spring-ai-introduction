@@ -100,7 +100,7 @@ mvn spring-boot:run
   ```
 
   ```bash
-  curl http://localhost:8080/mcppg/2 -d query="他のリコリス・リコイル関する購入品を教えて。"
+  curl http://localhost:8080/mcppg/2 -d query="他のリコリス・リコイルに関する購入品を教えて。"
   ```
 
 ## 発表資料のビルド
