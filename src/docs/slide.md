@@ -366,6 +366,44 @@ MainChatacters post(@RequestParam String query) {
 
 ---
 
+### 関数呼び出し
+
+```java
+@PostMapping
+public String post(@RequestParam String query) {
+    return chatClient.prompt().user(query)
+        .function("resolveGitHubAccount")
+        .call().content();
+}
+```
+
+- [Function calling](https://platform.openai.com/docs/guides/function-calling)を使える
+- `function`メソッドで関数のbean名を渡すだけ
+    - または`FunctionCallback`を使用して明示的に関数の定義を渡す
+
+---
+
+### 関数呼び出し
+
+```java
+@Component
+@Description("名前をもとにしてGitHubのアカウント名を返す関数。")
+public class ResolveGitHubAccount implements Function<User, GitHubAccount> {
+    public record User(String name) {}
+    public record GitHubAccount(String accountName) {}
+
+    @Override
+    public GitHubAccount apply(User user) {
+        return new GitHubAccount(switch (user.name()) {
+            case "うらがみ" -> "backpaper0";
+            default -> "unknown";
+        });
+    }
+}
+```
+
+---
+
 ### Advisor
 
 - 処理をインターセプトして前後処理を差し込んだり入出力を加工できる仕組み

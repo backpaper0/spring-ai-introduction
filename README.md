@@ -61,6 +61,12 @@ mvn spring-boot:run
   curl http://localhost:8080/structure -d query="ゼルダの伝説ブレスオブザワイルドの主人公とヒロイン、それから代表的なサブキャラクターを3人教えてください。" -s | jq
   ```
 
+- 関数呼び出し
+
+  ```bash
+  curl http://localhost:8080/function -d query="うらがみさんのGitHubアカウントは？"
+  ```
+
 - 会話
 
   ```bash
