@@ -50,8 +50,8 @@ _class: lead
 ### バージョンなど
 
 - Java 21
-- Spring Boot 3.4.1
-- Spring AI 1.0.0-M5
+- Spring Boot 3.4.2
+- Spring AI 1.0.0-M6
 - OpenAI API
     - 使用しているモデルは次の通り
         - テキスト生成: `gpt-4o-mini`
