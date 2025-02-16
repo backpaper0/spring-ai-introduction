@@ -5,7 +5,24 @@ services:
       - 'POSTGRES_DB=mydatabase'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
+      - 'PGDATA=/var/lib/postgresql/data/pgdata'
     labels:
       - "org.springframework.boot.service-connection=postgres"
     ports:
       - '5432:5432'
+    volumes:
+      - 'postrges-data:/var/lib/postgresql/data'
+
+  openobserve:
+    image: 'public.ecr.aws/zinclabs/openobserve:latest'
+    environment:
+      - 'ZO_ROOT_USER_EMAIL=root@example.com'
+      - 'ZO_ROOT_USER_PASSWORD=pass1234'
+    ports:
+      - '5080:5080'
+    volumes:
+      - 'openobserve-data:/data'
+
+volumes:
+  postrges-data: {}
+  openobserve-data: {}
