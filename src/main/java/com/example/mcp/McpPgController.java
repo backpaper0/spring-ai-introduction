@@ -24,7 +24,7 @@ public class McpPgController {
             .stream()
             .map(tool -> new McpFunctionCallback(mcpClient, tool))
             .toArray(McpFunctionCallback[]::new);
-        this.chatClient = builder.defaultFunctions(callbacks)
+        this.chatClient = builder.defaultTools(callbacks)
             .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
             .build();
     }
