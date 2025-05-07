@@ -1,16 +1,20 @@
 package com.example.mcp;
 
+import java.util.List;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.mcp.client.McpSyncClient;
-import org.springframework.ai.mcp.spring.McpFunctionCallback;
+import org.springframework.ai.mcp.SyncMcpToolCallback;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.modelcontextprotocol.client.McpSyncClient;
 
 @RestController
 @RequestMapping("mcppg")
@@ -19,12 +23,13 @@ public class McpPgController {
     private final ChatClient chatClient;
 
     public McpPgController(ChatClient.Builder builder, McpSyncClient mcpClient, ChatMemory chatMemory) {
-        McpFunctionCallback[] callbacks = mcpClient.listTools()
+        List<ToolCallback> callbacks = mcpClient.listTools()
             .tools()
             .stream()
-            .map(tool -> new McpFunctionCallback(mcpClient, tool))
-            .toArray(McpFunctionCallback[]::new);
-        this.chatClient = builder.defaultTools(callbacks)
+            .map(tool -> new SyncMcpToolCallback(mcpClient, tool))
+            .map(ToolCallback.class::cast)
+            .toList();
+        this.chatClient = builder.defaultToolCallbacks(callbacks)
             .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
             .build();
     }

@@ -1,12 +1,13 @@
 package com.example.mcp;
 
-import org.springframework.ai.mcp.client.McpClient;
-import org.springframework.ai.mcp.client.McpSyncClient;
-import org.springframework.ai.mcp.client.stdio.ServerParameters;
-import org.springframework.ai.mcp.client.stdio.StdioClientTransport;
-import org.springframework.ai.mcp.spec.McpTransport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import io.modelcontextprotocol.client.McpClient;
+import io.modelcontextprotocol.client.McpSyncClient;
+import io.modelcontextprotocol.client.transport.ServerParameters;
+import io.modelcontextprotocol.client.transport.StdioClientTransport;
+import io.modelcontextprotocol.spec.McpClientTransport;
 
 @Configuration
 public class McpSyncClientConfiguration {
@@ -16,8 +17,8 @@ public class McpSyncClientConfiguration {
         ServerParameters params = ServerParameters.builder("npx")
             .args("-y", "@modelcontextprotocol/server-postgres", "postgres://myuser:secret@localhost:5432/mydatabase")
             .build();
-        McpTransport transport = new StdioClientTransport(params);
-        McpSyncClient mcpClient = McpClient.using(transport).sync();
+        McpClientTransport transport = new StdioClientTransport(params);
+        McpSyncClient mcpClient = McpClient.sync(transport).build();
         mcpClient.initialize();
         return mcpClient;
     }
