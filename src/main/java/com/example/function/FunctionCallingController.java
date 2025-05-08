@@ -14,7 +14,7 @@ public class FunctionCallingController {
 
     public FunctionCallingController(ChatClient.Builder builder) {
         // function callingで使用する関数をbean名で登録
-        this.chatClient = builder.defaultTools("resolveGitHubAccount").build();
+        this.chatClient = builder.defaultToolNames("resolveGitHubAccount").build();
     }
 
     /**
