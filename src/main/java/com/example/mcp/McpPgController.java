@@ -3,7 +3,6 @@ package com.example.mcp;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.mcp.SyncMcpToolCallback;
@@ -30,7 +29,7 @@ public class McpPgController {
             .map(ToolCallback.class::cast)
             .toList();
         this.chatClient = builder.defaultToolCallbacks(callbacks)
-            .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+            .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
             .build();
     }
 
@@ -44,8 +43,7 @@ public class McpPgController {
     public String post(@RequestParam String query, @PathVariable String conversationId) {
         return chatClient.prompt()
             .user(query)
-            .advisors(
-                    advisor -> advisor.param(AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY, conversationId))
+            .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, conversationId))
             .call()
             .content();
     }

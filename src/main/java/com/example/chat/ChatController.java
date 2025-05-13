@@ -1,7 +1,6 @@
 package com.example.chat;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +16,7 @@ public class ChatController {
     private final ChatClient chatClient;
 
     public ChatController(ChatClient.Builder builder, ChatMemory chatMemory) {
-        this.chatClient = builder.defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory)).build();
+        this.chatClient = builder.defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build()).build();
     }
 
     /**
@@ -30,8 +29,7 @@ public class ChatController {
     public String post(@RequestParam String query, @PathVariable String conversationId) {
         return chatClient.prompt()
             .user(query)
-            .advisors(
-                    advisor -> advisor.param(AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY, conversationId))
+            .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, conversationId))
             .call()
             .content();
     }
